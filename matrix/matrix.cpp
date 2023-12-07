@@ -79,7 +79,7 @@ void print_matrix(const Matrix& matrix)
     {
         for (int j = 0; j < matrix.size; j++) {
             //I store only half of the matrix(less RAM usage)
-            //so I need this if to print both sides of the matrix
+            //so I need this if statement to print both sides of the matrix
             if (j < i + 1) {
                 std::cout << matrix.data[i][j] << " ";
             } else {

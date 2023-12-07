@@ -8,7 +8,6 @@
 int main()
 {
 	int size;
-    int flag;
 
     std::cout << "enter number of rows/columns: ";
     size = int_input();
