@@ -13,7 +13,7 @@ Matrix create_matrix(int size);
 
 void fill_matrix(Matrix& matrix);
 
-int formula_calculations(const Matrix& matrix, std::vector<float>& vector);
+void formula_calculations(const Matrix& matrix, std::vector<float>& vector);
 
 void print_matrix(const Matrix& matrix);
 

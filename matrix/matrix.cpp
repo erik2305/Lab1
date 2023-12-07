@@ -11,7 +11,7 @@ Matrix create_matrix(int size)
         {
             matrix.data[i] = new int[i];
             //ok, last time I had a lot of questions of what im doing in line
-            //we never know when we get bad alloc it can happen when matrix not fully created
+            //we never know when we get bad alloc it can happen when matrix not fully created,
             //so we have to track how many rows we've created
             //I change size of the matrix every iteration to know exactly how much of RAM to clear
             matrix.size = i;
@@ -20,6 +20,8 @@ Matrix create_matrix(int size)
 }
 
 //fills matrix with numbers
+//here i don't check for symmetric
+//because matrix will always be symmetric, user inputs only for half of the matrix
 void fill_matrix(Matrix& matrix)
 {
     for (int i = 0; i < matrix.size; i++)
@@ -34,10 +36,11 @@ void fill_matrix(Matrix& matrix)
 }
 
 //calculates vector values
-int formula_calculations(const Matrix& matrix, std::vector<float>& vector)
+void formula_calculations(const Matrix& matrix, std::vector<float>& vector)
 {
     int cMin, cMax;
     std::vector<int> rowSum(matrix.size);
+
     for (int i = 0; i < matrix.size; i++)
     {
         for (int j = 0; j < matrix.size; j++)
@@ -55,18 +58,11 @@ int formula_calculations(const Matrix& matrix, std::vector<float>& vector)
 
     cMax = *max_element(rowSum.begin(),rowSum.end());
 
-    try {
-        if(cMin == cMax){
-            throw(cMin - cMax);
-        }
-        else
-        for (int i = 0; i < matrix.size; i++) {
-            vector[i] = ((float) (rowSum[i] - cMin)) / ((cMax - cMin));
-        }
-        return 1;
+    if(cMin == cMax) {
+        throw (std::invalid_argument("0 in denominator. finishing program"));
     }
-    catch(int denominator) {
-        return -1;
+    for (int i = 0; i < matrix.size; i++) {
+        vector[i] = ((float) (rowSum[i] - cMin)) / ((cMax - cMin));
     }
 }
 
@@ -82,6 +78,8 @@ void print_matrix(const Matrix& matrix)
     for (int i = 0; i < matrix.size; i++)
     {
         for (int j = 0; j < matrix.size; j++) {
+            //I store only half of the matrix(less RAM usage)
+            //so I need this if to print both sides of the matrix
             if (j < i + 1) {
                 std::cout << matrix.data[i][j] << " ";
             } else {

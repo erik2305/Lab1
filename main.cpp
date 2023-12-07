@@ -24,28 +24,28 @@ int main()
     catch(std::bad_alloc & exception){
         std::cerr << "bad_alloc detected: " << exception.what()<< std::endl<<"terminating program";
         delete_matrix(matrix);
-        return 0;
+        return -1;
     }
 
 	fill_matrix(matrix);
 
     print_matrix(matrix);
 
-    flag = formula_calculations(matrix, vector);
-    if (flag== -1)
-    {
-        std::cout<<"error. 0 in denominator. finishing program";
+    try {
+        formula_calculations(matrix, vector);
     }
-    else
+    catch (std::invalid_argument& e)
     {
-        std::cout<<"Vector: ";
-        for (int i = 0; i < matrix.size; i++) {
-            std::cout<<vector[i] << " ";
-        }
+        std::cerr << e.what() << std::endl;
+        delete_matrix(matrix);
+        return -1;
+    }
+    std::cout<<"Vector: ";
+    for (int i = 0; i < matrix.size; i++) {
+        std::cout<<vector[i] << " ";
     }
 
 	delete_matrix(matrix);
-
     std::cout<<std::endl<<"press enter to close program";
 	std::cin.ignore((std::numeric_limits< std::streamsize >::max)(), '\n');
 	return 0;
