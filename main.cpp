@@ -5,7 +5,6 @@
 #include "matrix/matrix.h"
 #include "input/input.h"
 
-//review on review: display matrix and vector usage is demanded by task terms
 int main()
 {
 	int size;
@@ -13,16 +12,20 @@ int main()
 
     std::cout << "enter number of rows/columns: ";
     size = int_input();
-    while (size <= 0)
-    {
-        std::cout << "matrix can't have size less than 0 \n";
-        std::cout << "enter number of rows/columns: ";
-        size = int_input();
-    }
 
+    //vector usage is demanded by task terms
     std::vector<float> vector(size);
+    Matrix matrix;
 
-	Matrix matrix = create_matrix(size);
+    try
+    {
+	    matrix = create_matrix(size);
+    }
+    catch(std::bad_alloc & exception){
+        std::cerr << "bad_alloc detected: " << exception.what()<< std::endl<<"terminating program";
+        delete_matrix(matrix);
+        return 0;
+    }
 
 	fill_matrix(matrix);
 

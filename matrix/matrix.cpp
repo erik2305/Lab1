@@ -1,26 +1,21 @@
 #include "matrix.h"
 #include <iostream>
-
+#include "../input/input.h"
 
 //creates matrix
 Matrix create_matrix(int size)
 {
 	Matrix matrix;
 	matrix.data = new int* [size];
-    try
-    {
-        for (int i = 0; i < size + 1; i++)
+        for (int i = 0; i < size +1; i++)
         {
             matrix.data[i] = new int[i];
+            //ok, last time I had a lot of questions of what im doing in line
+            //we never know when we get bad alloc it can happen when matrix not fully created
+            //so we have to track how many rows we've created
+            //I change size of the matrix every iteration to know exactly how much of RAM to clear
             matrix.size = i;
         }
-    }
-    catch (std::bad_alloc & exception)
-    {
-        std::cerr << "bad_alloc detected: " << exception.what()<< std::endl<<"terminating program";
-        delete_matrix(matrix);
-        abort();
-    }
     return matrix;
 }
 
@@ -39,7 +34,7 @@ void fill_matrix(Matrix& matrix)
 }
 
 //calculates vector values
-int formula_calculations(Matrix& matrix, std::vector<float>& vector)
+int formula_calculations(const Matrix& matrix, std::vector<float>& vector)
 {
     int cMin, cMax;
     std::vector<int> rowSum(matrix.size);
@@ -49,7 +44,8 @@ int formula_calculations(Matrix& matrix, std::vector<float>& vector)
         {
             if (j < i + 1) {
                 rowSum[i] += matrix.data[i][j];
-            } else {
+            }
+            else {
                 rowSum[i] += matrix.data[j][i];
             }
         }
@@ -59,30 +55,23 @@ int formula_calculations(Matrix& matrix, std::vector<float>& vector)
 
     cMax = *max_element(rowSum.begin(),rowSum.end());
 
-    if (cMin == cMax)
-    {
-        return -1;
-    }
-
-    else
-    {
+    try {
+        if(cMin == cMax){
+            throw(cMin - cMax);
+        }
+        else
         for (int i = 0; i < matrix.size; i++) {
             vector[i] = ((float) (rowSum[i] - cMin)) / ((cMax - cMin));
         }
-            return 1;
+        return 1;
+    }
+    catch(int denominator) {
+        return -1;
     }
 }
 
-//If you think jokes are inappropriate in the comments, don't translate this true life story
-
-//Entro a la cocina y pongo la tetera en la estufa. Giro la perilla de la estufa. Miro la estufa y
-//la tetera, esperando que el agua hierva en la tetera. Después de unos cinco minutos, un hedor
-//salvaje se extiende por toda la cocina. No es de extrañar, porque el hervidor es eléctrico.
-
-//if you translated the story, don't complain.
-
 //prints matrix
-void print_matrix(Matrix& matrix)
+void print_matrix(const Matrix& matrix)
 {
     for (int i = 0; i < matrix.size; i++)
     {
@@ -93,14 +82,14 @@ void print_matrix(Matrix& matrix)
                 std::cout << matrix.data[j][i] << " ";
             }
         }
-        std::cout << std::endl;
+        std::cout << "\n";
     }
 }
 
 //clears space in RAM
 void delete_matrix(Matrix& matrix)
 {
-    for (int i = 0; i < matrix.size + 1; i++)
+    for (int i = 0; i < matrix.size+1; i++)
     {
         delete[] matrix.data[i];
     }

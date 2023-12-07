@@ -1,7 +1,6 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include "../input/input.h"
 #include <iostream>
 #include <vector>
 
@@ -14,11 +13,10 @@ Matrix create_matrix(int size);
 
 void fill_matrix(Matrix& matrix);
 
-int formula_calculations(Matrix& matrix, std::vector<float>& vector);
+int formula_calculations(const Matrix& matrix, std::vector<float>& vector);
 
-void print_matrix(Matrix& matrix);
+void print_matrix(const Matrix& matrix);
 
 void delete_matrix(Matrix& matrix);
 
-#endif //INPUT_H
-
+#endif //INPUT_H - > MATRIX_H
