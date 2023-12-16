@@ -70,6 +70,12 @@ int formula_calculations(const Matrix& matrix, std::vector<float>& vector)
     }
 }
 
+//chto skazal golub-web-razrabotchik???
+
+
+
+//kURLyk
+
 //prints matrix
 void print_matrix(const Matrix& matrix)
 {
